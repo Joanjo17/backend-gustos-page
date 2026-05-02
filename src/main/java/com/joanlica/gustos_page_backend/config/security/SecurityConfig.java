@@ -3,6 +3,7 @@ package com.joanlica.gustos_page_backend.config.security;
 import com.joanlica.gustos_page_backend.config.security.filters.JwtTokenValidator;
 import com.joanlica.gustos_page_backend.core.handler.ErrorResponseFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,12 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final ErrorResponseFactory errorFactory;
 
+    @Value("${app.cookies.secure}")
+    private boolean secure;
+
+    @Value("${app.cookies.same-site}")
+    private String sameSite;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            AuthenticationEntryPoint jsonAuthenticationEntryPoint,
@@ -48,7 +55,7 @@ public class SecurityConfig {
                 // 1. Aplica la configuración CORS primero
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRepository(csrfTokenRepository())
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
                         .ignoringRequestMatchers(
                                 "/api/v1/auth/register",
@@ -87,6 +94,20 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtTokenValidator, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repository =
+                CookieCsrfTokenRepository.withHttpOnlyFalse();
+
+        repository.setCookieCustomizer(cookie -> cookie
+                .path("/")
+                .secure(secure)
+                .sameSite(sameSite)
+        );
+
+        return repository;
     }
 
     @Bean
