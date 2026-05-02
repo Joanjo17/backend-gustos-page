@@ -12,12 +12,7 @@ public record UserAuthResponseDTO(
                 description = "Username del usuario.",
                 example = "Joanjo17"
         )
-        String username,
-        @Schema(
-                description = "Nombre del usuario.",
-                example = "Joan"
-        )
-        String name
+        String username
 
 ) {
 }

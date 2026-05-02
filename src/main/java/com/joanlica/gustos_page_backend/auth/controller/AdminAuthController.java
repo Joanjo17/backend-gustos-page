@@ -2,7 +2,6 @@ package com.joanlica.gustos_page_backend.auth.controller;
 
 import com.joanlica.gustos_page_backend.auth.dto.admin.UpdateUserRolesDTO;
 import com.joanlica.gustos_page_backend.auth.dto.admin.UserRolesResponseDTO;
-import com.joanlica.gustos_page_backend.auth.dto.user.UserAuthResponseDTO;
 import com.joanlica.gustos_page_backend.auth.service.AdminAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

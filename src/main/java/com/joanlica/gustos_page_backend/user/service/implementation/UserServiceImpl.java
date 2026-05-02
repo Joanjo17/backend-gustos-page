@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario buscarUsuarioPorUsername(String username) {
         return userRepository.findUsuarioByUser_Username(username)
-                .orElseThrow(() -> new UsuarioNotFoundException("El usuario no existe"));
+                .orElseThrow(() -> new UsuarioNotFoundException("El usuario"+ username +"no existe"));
     }
 
     @Override

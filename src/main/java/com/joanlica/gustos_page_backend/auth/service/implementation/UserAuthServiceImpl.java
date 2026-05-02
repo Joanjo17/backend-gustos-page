@@ -17,6 +17,7 @@ import com.joanlica.gustos_page_backend.user.model.Usuario;
 import com.joanlica.gustos_page_backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -117,12 +118,17 @@ public class UserAuthServiceImpl implements UserAuthService {
                 new UserAuthResponseDTO(
                         user.getId(),
                         loginUserRequestDTO.username()
+
                 )
         );
     }
 
     @Override
     public String refresh(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new BadCredentialsException("Refresh token missing");
+        }
+
         DecodedJWT decodedJWT = jwtUtils.validateToken(refreshToken);
 
         if (!jwtUtils.isRefreshToken(decodedJWT)) {

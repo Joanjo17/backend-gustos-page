@@ -1,5 +1,6 @@
 package com.joanlica.gustos_page_backend.core.handler;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.joanlica.gustos_page_backend.core.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -177,6 +178,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserNotOwnerException(UserNotOwnerException ex, HttpServletRequest req) {
         return errorFactory.entity(HttpStatus.FORBIDDEN,"user-not-owner",
                 ex.getMessage(), req.getRequestURI(), Map.of());
+    }
+    //JWTDecodeException
+    @ExceptionHandler(JWTDecodeException.class)
+    public ResponseEntity<Object> handleJWTDecodeException(JWTDecodeException ex, HttpServletRequest req) {
+        return errorFactory.entity(HttpStatus.BAD_REQUEST,"invalid_token",
+                "Invalid JWT token", req.getRequestURI(), Map.of());
     }
 
     /**
