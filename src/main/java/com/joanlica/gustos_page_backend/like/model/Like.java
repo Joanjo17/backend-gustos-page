@@ -4,6 +4,7 @@ import com.joanlica.gustos_page_backend.user.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -30,7 +31,7 @@ public class Like {
             joinColumns = @JoinColumn(name = "like_id")
     )
     @Column(name = "category")
-    private Set<String> categorySet;
+    private Set<String> categorySet= new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
